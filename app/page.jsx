@@ -8,9 +8,9 @@ const Home = () => {
 
   return (
     <section className="w-full flex-center flex-col">
-      <div className="sm:flex hidden">
+      <div className="flex">
         {session?.user ? (
-          <div className="flex gap-3 md:gap-5">
+          <div className="flex gap-3 gap-5">
             <Feed />
           </div>
         ) : (
