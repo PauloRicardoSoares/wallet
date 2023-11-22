@@ -31,9 +31,17 @@ const PromptCard = ({ transition }) => {
         </div>
       </div>
 
-      <p className="my-4 font-satoshi text-sm text-gray-700">
+{transition.type === "I" ? (
+
+
+      <p className="my-4 font-satoshi text-sm text-green-700">
         {parseFloat(transition.value.$numberDecimal).toFixed(2)}
       </p>
+) : (
+  <p className="my-4 font-satoshi text-sm text-red">
+    {parseFloat(transition.value.$numberDecimal).toFixed(2)}
+  </p>
+)}
     </div>
   );
 };
