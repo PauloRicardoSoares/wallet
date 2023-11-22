@@ -14,9 +14,9 @@ const PromptCard = ({ transition }) => {
   const [copied, setCopied] = useState("");
 
   return (
-    <div className="prompt_card">
+    <div className="prompt_card flex flex-col">
       <div>
-      <div className="flex justify-between items-start gap-5">
+      <div className="flex flex-col justify-between items-start gap-5">
         <h3 className="font-satoshi font-semibold text-gray-900">
           {transition.description}
         </h3>
