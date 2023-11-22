@@ -25,7 +25,10 @@ export const POST = async (req) => {
 
     await newTransition.save();
 
-    wallet.value = type === "I" ? wallet.value + value : wallet.value - value;
+    wallet.value =
+      type === "I"
+        ? parseFloat(wallet.value) + parseFloat(value)
+        : parseFloat(wallet.value) - parseFloat(value);
 
     await wallet.save();
 
