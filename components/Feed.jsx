@@ -10,44 +10,49 @@ import Link from "next/link";
 const Feed = () => {
   const [wallet, setWallet] = useState([]);
   const [transition, setTransition] = useState([]);
+  const [limit, setLimit] = useState(3);
   const { data: session } = useSession();
-
 
   useEffect(() => {
     const fetchWallet = async () => {
-      const response = await fetch("/api/wallet", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${session.user.id}`,
-        },
-      });
-      const data = await response.json();
-
-      data.value = parseFloat(data.value.$numberDecimal).toFixed(2);
-
-      setWallet(data);
+      if (session && session.user) {
+        const response = await fetch("/api/wallet", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${session.user.id}`,
+          },
+        });
+        const data = await response.json();
+  
+        data.value = parseFloat(data.value.$numberDecimal).toFixed(2);
+  
+        setWallet(data);
+      }
     };
-
+  
     fetchWallet();
-  }, []);
-
+  }, [session]);
+  
   useEffect(() => {
     const fetchTransition = async () => {
-      const response = await fetch("/api/transition", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${session.user.id}`,
-        },
-      });
-      const data = await response.json();
-
-      setTransition(data);
+      if (session && session.user) {
+        const response = await fetch(`/api/transition?limit=${limit}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${session.user.id}`,
+          },
+        });
+        const data = await response.json();
+  
+        setTransition(data);
+      }
     };
-
+  
     fetchTransition();
-  }, []);
+  }, [session, limit]);
+  
 
   return (
     <session className="feed">
