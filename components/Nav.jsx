@@ -42,7 +42,7 @@ const Nav = () => {
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
-            <Link href="/transition" className="black_btn">
+            <Link href="/transition/new" className="black_btn">
               Create Transition
             </Link>
 
@@ -101,7 +101,7 @@ const Nav = () => {
                   My Profile
                 </Link>
                 <Link
-                  href="/transition"
+                  href="/transition/new"
                   className="dropdown_link"
                   onClick={() => setToggleDropdown(false)}
                 >

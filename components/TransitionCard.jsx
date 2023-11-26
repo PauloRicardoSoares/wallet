@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const PromptCard = ({ transition }) => {
   const { data: session } = useSession();
@@ -47,12 +48,12 @@ const PromptCard = ({ transition }) => {
         )}
       </div>
       <div className="flex gap-2">
-        <div
+        <Link
           className="border w-full text-center rounded-xl p-1 bg-yellow-300 hover:bg-yellow-400 cursor-pointer"
-          onClick={() => handleEditClick()}
+          href={`/transition/edit?id=${transition._id}`}
         >
           Edit
-        </div>
+        </Link>
         <div
           className="border w-full text-center rounded-xl p-1 text-white bg-red-600 hover:bg-red-700 cursor-pointer"
           onClick={() => handleDeleteClick()}

@@ -1,5 +1,6 @@
 import Transition from "@models/transition";
 import { connectToDB } from "@utils/database";
+import Wallet from "@models/wallet";
 
 // #region GET => Read
 
@@ -23,22 +24,46 @@ export const GET = async (request, { params }) => {
 // #region PATCH => Update
 
 export const PATCH = async (request, { params }) => {
-  const { transition, tag } = await request.json();
+  const { description, userId, value, tag, type } = await request.json();
 
   try {
     await connectToDB();
 
-    const existingTransition = await Transition.findById(params.id);
+    const transition = await Transition.findById(params.id);
 
-    if (!existingTransition)
+    if (!transition)
       return new Response("Transition not found", { status: 404 });
 
-    existingTransition.transition = transition;
-    existingTransition.tag = tag;
+    if (transition.creator != userId) {
+      return new Response(
+        `User validate fail ${transition.creator} -- ${creator} `,
+        { status: 401 }
+      );
+    }
 
-    await existingTransition.save();
+    const wallet = await Wallet.findOne({
+      creator: userId,
+    }).populate("creator");
 
-    return new Response(JSON.stringify(existingTransition), { status: 200 });
+    if (!wallet) {
+      return new Response("Wallet not found", { status: 500 });
+    }
+
+    wallet.value =
+      type === "I"
+        ? parseFloat(wallet.value) - parseFloat(transition.value) + parseFloat(value) 
+        : parseFloat(wallet.value) + parseFloat(transition.value) - parseFloat(value);
+
+    await wallet.save();
+
+    transition.description = description;
+    transition.value = value;
+    transition.type = type;
+    transition.tag = tag;
+
+    await transition.save();
+
+    return new Response(JSON.stringify(transition), { status: 200 });
   } catch (error) {
     return new Response("Failed to update", { status: 500 });
   }
@@ -52,23 +77,42 @@ export const DELETE = async (request, { params }) => {
   try {
     await connectToDB();
 
-    const existingTransition = await Transition.findById(params.id);
+    const transition = await Transition.findById(params.id);
     const creator = request.headers.get("Authorization");
 
-    if (!existingTransition) {
+    if (!transition) {
       return new Response("Transition not found", { status: 404 });
     }
 
-    if (existingTransition.creator != creator) {
-      return new Response(`User validate fail ${existingTransition.creator} -- ${creator} `, { status: 401 });
+    if (transition.creator != creator) {
+      return new Response(
+        `User validate fail ${transition.creator} -- ${creator} `,
+        { status: 401 }
+      );
     }
 
-    existingTransition.deletedAt = Date();
+    const wallet = await Wallet.findOne({
+      creator: creator,
+    }).populate("creator");
 
-    await existingTransition.save();
+    if (!wallet) {
+      return new Response("Wallet not found", { status: 500 });
+    }
+
+    wallet.value =
+      transition.type === "I"
+        ? parseFloat(wallet.value) - parseFloat(transition.value)
+        : parseFloat(wallet.value) + parseFloat(transition.value);
+
+    await wallet.save();
+
+    transition.deletedAt = Date();
+
+    await transition.save();
 
     return new Response("Transition deleted", { status: 200 });
   } catch (error) {
+    console.log(error);
     return new Response("Failed to delete", { status: 500 });
   }
 };
