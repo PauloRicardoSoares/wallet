@@ -21,6 +21,14 @@ const TransitionSchema = new Schema({
     type: String,
     required: [true, "Tag is required!"],
   },
+  status: {
+    type: String,
+    default: "Active"
+  },
+  deletedAt: {
+    type: Date,
+    default: null
+  }
 });
 
 const Transition = models.Transition || model("Transition", TransitionSchema);

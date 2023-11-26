@@ -13,6 +13,8 @@ export const POST = async (req) => {
       value,
       type,
       tag,
+      status: 'Active',
+      deletedAt: null,
     });
 
     const wallet = await Wallet.findOne({

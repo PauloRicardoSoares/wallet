@@ -7,7 +7,7 @@ export const GET = async (request) => {
   try {
     await connectToDB();
 
-    const transition = await Transition.find({ creator: creator }).populate(
+    const transition = await Transition.find({ creator: creator, deletedAt: null }).populate(
       "creator"
     );
     return new Response(JSON.stringify(transition), { status: 200 });

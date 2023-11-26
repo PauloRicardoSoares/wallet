@@ -1,19 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
 
 const PromptCard = ({ transition }) => {
   const { data: session } = useSession();
 
-  const pathName = usePathname();
-  const router = useRouter();
+  // const pathName = usePathname();
+  // const router = useRouter();
 
-  const [copied, setCopied] = useState("");
+  const handleDeleteClick = async (e) => {
+    const response = await fetch(`/api/transition/${transition._id}/`, {
+      method: "DELETE", // ou 'GET', 'PUT', etc.
+      headers: {
+        Authorization: `${session.user.id}`, // se precisar de autenticação
+      },
+    });
+  };
 
-  const handleDeleteClick = (e) => {
+  const handleEditClick = (e) => {
     alert(transition.description);
   };
 
@@ -42,8 +46,19 @@ const PromptCard = ({ transition }) => {
           </p>
         )}
       </div>
-      <div className="text-red-700" onClick={() => handleDeleteClick()}>
-        Deletar
+      <div className="flex gap-2">
+        <div
+          className="border w-full text-center rounded-xl p-1 bg-yellow-300 hover:bg-yellow-400 cursor-pointer"
+          onClick={() => handleEditClick()}
+        >
+          Edit
+        </div>
+        <div
+          className="border w-full text-center rounded-xl p-1 text-white bg-red-600 hover:bg-red-700 cursor-pointer"
+          onClick={() => handleDeleteClick()}
+        >
+          Delete
+        </div>
       </div>
     </div>
   );

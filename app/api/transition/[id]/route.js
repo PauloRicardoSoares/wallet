@@ -1,4 +1,4 @@
-import Prompt from "@models/transition";
+import Transition from "@models/transition";
 import { connectToDB } from "@utils/database";
 
 // #region GET => Read
@@ -7,13 +7,14 @@ export const GET = async (request, { params }) => {
   try {
     await connectToDB();
 
-    const prompt = await Prompt.findById(params.id).populate("creator");
+    const transition = await Transition.findById(params.id).populate("creator");
 
-    if (!prompt) return new Response("Prompt not found", { status: 404 });
+    if (!transition)
+      return new Response("Transition not found", { status: 404 });
 
-    return new Response(JSON.stringify(prompt), { status: 200 });
+    return new Response(JSON.stringify(transition), { status: 200 });
   } catch (error) {
-    return new Response("Failed to fetch all prompts", { status: 500 });
+    return new Response("Failed to fetch all transitions", { status: 500 });
   }
 };
 
@@ -22,22 +23,22 @@ export const GET = async (request, { params }) => {
 // #region PATCH => Update
 
 export const PATCH = async (request, { params }) => {
-  const { prompt, tag } = await request.json();
+  const { transition, tag } = await request.json();
 
   try {
     await connectToDB();
 
-    const existingPrompt = await Prompt.findById(params.id);
+    const existingTransition = await Transition.findById(params.id);
 
-    if (!existingPrompt)
-      return new Response("Prompt not found", { status: 404 });
+    if (!existingTransition)
+      return new Response("Transition not found", { status: 404 });
 
-    existingPrompt.prompt = prompt;
-    existingPrompt.tag = tag;
+    existingTransition.transition = transition;
+    existingTransition.tag = tag;
 
-    await existingPrompt.save();
+    await existingTransition.save();
 
-    return new Response(JSON.stringify(existingPrompt), { status: 200 });
+    return new Response(JSON.stringify(existingTransition), { status: 200 });
   } catch (error) {
     return new Response("Failed to update", { status: 500 });
   }
@@ -51,9 +52,22 @@ export const DELETE = async (request, { params }) => {
   try {
     await connectToDB();
 
-    await Prompt.findByIdAndRemove(params.id);
+    const existingTransition = await Transition.findById(params.id);
+    const creator = request.headers.get("Authorization");
 
-    return new Response("Prompt deleted", { status: 200 });
+    if (!existingTransition) {
+      return new Response("Transition not found", { status: 404 });
+    }
+
+    if (existingTransition.creator != creator) {
+      return new Response(`User validate fail ${existingTransition.creator} -- ${creator} `, { status: 401 });
+    }
+
+    existingTransition.deletedAt = Date();
+
+    await existingTransition.save();
+
+    return new Response("Transition deleted", { status: 200 });
   } catch (error) {
     return new Response("Failed to delete", { status: 500 });
   }
