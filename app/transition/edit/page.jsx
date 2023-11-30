@@ -31,7 +31,7 @@ const EditTransition = () => {
         },
       });
 
-      const { _id, description, tag, value, type } = await response.json();
+      const { _id, description, tag, value, type, date } = await response.json();
 
       setPost({
         id: _id, 
@@ -39,6 +39,7 @@ const EditTransition = () => {
         tag,
         value: value.$numberDecimal,
         type,
+        date: date.split('T')[0],
       });
     };
 
@@ -59,6 +60,7 @@ const EditTransition = () => {
           value: post.value,
           tag: post.tag,
           type: post.type,
+          date: post.date,
         }),
       });
 

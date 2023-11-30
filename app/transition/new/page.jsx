@@ -16,6 +16,7 @@ const CreateTransition = () => {
     tag: "",
     value: "",
     type: "",
+    date: "",
   });
 
   const createTransition = async (e) => {
@@ -32,6 +33,7 @@ const CreateTransition = () => {
           value: post.value,
           tag: post.tag,
           type: post.type,
+          date: post.date,
         }),
       });
 

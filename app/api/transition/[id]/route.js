@@ -24,7 +24,7 @@ export const GET = async (request, { params }) => {
 // #region PATCH => Update
 
 export const PATCH = async (request, { params }) => {
-  const { description, userId, value, tag, type } = await request.json();
+  const { description, userId, value, tag, type, date } = await request.json();
 
   try {
     await connectToDB();
@@ -60,6 +60,7 @@ export const PATCH = async (request, { params }) => {
     transition.value = value;
     transition.type = type;
     transition.tag = tag;
+    transition.date = date;
 
     await transition.save();
 

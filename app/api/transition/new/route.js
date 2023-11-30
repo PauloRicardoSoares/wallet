@@ -3,7 +3,7 @@ import Wallet from "@models/wallet";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (req) => {
-  const { description, userId, value, tag, type } = await req.json();
+  const { description, userId, value, tag, type, date } = await req.json();
 
   try {
     await connectToDB();
@@ -15,6 +15,8 @@ export const POST = async (req) => {
       tag,
       status: 'Active',
       deletedAt: null,
+      date,
+      createdAt: Date(),
     });
 
     const wallet = await Wallet.findOne({
@@ -41,6 +43,7 @@ export const POST = async (req) => {
         value,
         type,
         tag,
+        date,
         newValue: wallet.value,
       }),
       { status: 201 }

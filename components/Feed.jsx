@@ -61,7 +61,7 @@ const Feed = () => {
       <div className="transitions">
         <div className="transitions-title">
           <h2 className="title">Transitions</h2>
-          <Link href="/transition" className="transition-all">
+          <Link href="/transition" className="transitions-all">
             See all
           </Link>
         </div>

@@ -37,7 +37,7 @@ const Transitions = () => {
     <section className="transitions">
       <div className="transitions-title">
         <h2 className="title">Transitions</h2>
-        <Link href="/" className="transition-all">
+        <Link href="/" className="transitions-all">
           Voltar
         </Link>
       </div>

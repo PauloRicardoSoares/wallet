@@ -65,6 +65,19 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
           />
         </label>
 
+        {/* Date */}
+        <label>
+          <span className="font-satoshi font-semibold text-base text-gray-700">
+            Date {` `}
+          </span>
+          <input
+            type="date"
+            className="form_input"
+            value={post.date}
+            onChange={(e) => setPost({ ...post, date: e.target.value })}
+          />
+        </label>
+
         {/* Type */}
         <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">
@@ -77,7 +90,6 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
                 ...post,
                 type: e.target.value,
               });
-              console.log(post);
             }}
             value={post.type}
             placeholder="#Tag"

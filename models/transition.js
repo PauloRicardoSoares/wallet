@@ -25,6 +25,14 @@ const TransitionSchema = new Schema({
     type: String,
     default: "Active"
   },
+  date: {
+    type: Date,
+    required: [true, "Date is required!"],
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   deletedAt: {
     type: Date,
     default: null

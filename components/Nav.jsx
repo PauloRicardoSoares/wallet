@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
   const { data: session } = useSession();
@@ -11,6 +12,18 @@ const Nav = () => {
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [hasProviders, setHasProviders] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Substitua isso pela sua lógica de verificação de login
+    const usuarioEstaLogado = false;
+
+    if (!session?.user) {
+      router.push("/");
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     const setUpProviders = async () => {
