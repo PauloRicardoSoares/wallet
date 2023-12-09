@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const PromptCard = ({ transition }) => {
   const { data: session } = useSession();
@@ -18,7 +19,11 @@ const PromptCard = ({ transition }) => {
       },
     });
     if (response.ok) {
-      router.push("/");
+      toast.success("Transition deleted successfully", {
+        onClose: () => {
+          router.push("/");
+        },
+      });
     }
   };
 

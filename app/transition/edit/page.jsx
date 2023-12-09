@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
+import { toast } from "react-toastify";
 
 const EditTransition = () => {
   const router = useRouter();
@@ -31,15 +32,16 @@ const EditTransition = () => {
         },
       });
 
-      const { _id, description, tag, value, type, date } = await response.json();
+      const { _id, description, tag, value, type, date } =
+        await response.json();
 
       setPost({
-        id: _id, 
+        id: _id,
         description,
         tag,
         value: value.$numberDecimal,
         type,
-        date: date.split('T')[0],
+        date: date.split("T")[0],
       });
     };
 
@@ -65,10 +67,19 @@ const EditTransition = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        toast.success("Transition updated successfully", {
+          onClose: () => {
+            router.push("/");
+          },
+        });
       }
     } catch (error) {
       console.log(error);
+      toast.error("Error creating transaction", {
+        onClose: () => {
+          router.push("/transition/new");
+        },
+      });
     } finally {
       setSubmitting(false);
     }

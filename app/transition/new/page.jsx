@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import Form from "@components/Form";
+import { toast } from "react-toastify";
 
 const CreateTransition = () => {
   const router = useRouter();
@@ -38,23 +39,34 @@ const CreateTransition = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        toast.success("Transition created successfully", {
+          onClose: () => {
+            router.push("/");
+          },
+        });
       }
     } catch (error) {
       console.log(error);
+      toast.error("Error creating transaction", {
+        onClose: () => {
+          router.push("/transition/new");
+        },
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <Form
-      type="Create"
-      post={post}
-      setPost={setPost}
-      submitting={submitting}
-      handleSubmit={createTransition}
-    />
+    <div>
+      <Form
+        type="Create"
+        post={post}
+        setPost={setPost}
+        submitting={submitting}
+        handleSubmit={createTransition}
+      />
+    </div>
   );
 };
 
